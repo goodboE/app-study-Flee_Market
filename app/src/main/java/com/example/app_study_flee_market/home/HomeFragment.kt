@@ -1,6 +1,7 @@
 package com.example.app_study_flee_market.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_study_flee_market.DBKey.Companion.DB_ARTICLES
 import com.example.app_study_flee_market.R
 import com.example.app_study_flee_market.databinding.FragmentHomeBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
@@ -18,7 +20,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
-
 
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var articleDB: DatabaseReference
@@ -58,6 +59,17 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
         fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
 
+        fragmentHomeBinding.addFloatingButton.setOnClickListener {
+            context?.let {
+//                if (auth.currentUser != null) {
+                    val intent = Intent(it, ArticleAddActivity::class.java)
+                    startActivity(intent)
+//                } else {
+//                    Snackbar.make(view, "로그인 후 사용해주세요.", Snackbar.LENGTH_LONG).show()
+//                }
+
+            }
+        }
     }
 
 
