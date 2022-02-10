@@ -23,6 +23,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var articleDB: DatabaseReference
+    private lateinit var userDB: DatabaseReference
 
     private val articleList = mutableListOf<ArticleModel>()
     private val listener = object: ChildEventListener {
@@ -55,18 +56,32 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         articleDB = Firebase.database.reference.child(DB_ARTICLES)
         articleDB.addChildEventListener(listener)
 
-        articleAdapter = ArticleAdapter()
+        articleAdapter = ArticleAdapter(onItemClicked = { articleModel ->
+            if (auth.currentUser != null) {
+                if (auth.currentUser?.uid != articleModel.sellerId) {
+
+
+
+                } else {
+                    Snackbar.make(view, "내가 올린 아이템입니다.", Snackbar.LENGTH_LONG).show()
+                }
+            } else {
+                Snackbar.make(view, "로그인 후 사용해주세요.", Snackbar.LENGTH_LONG).show()
+            }
+
+
+        })
         fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
         fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
 
         fragmentHomeBinding.addFloatingButton.setOnClickListener {
             context?.let {
-//                if (auth.currentUser != null) {
+                if (auth.currentUser != null) {
                     val intent = Intent(it, ArticleAddActivity::class.java)
                     startActivity(intent)
-//                } else {
-//                    Snackbar.make(view, "로그인 후 사용해주세요.", Snackbar.LENGTH_LONG).show()
-//                }
+                } else {
+                    Snackbar.make(view, "로그인 후 사용해주세요.", Snackbar.LENGTH_LONG).show()
+                }
 
             }
         }
@@ -79,7 +94,6 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         articleAdapter.notifyDataSetChanged()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
 
