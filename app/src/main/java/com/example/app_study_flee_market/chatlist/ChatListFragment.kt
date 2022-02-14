@@ -1,6 +1,7 @@
 package com.example.app_study_flee_market.chatlist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_study_flee_market.DBKey.Companion.CHILD_CHAT
 import com.example.app_study_flee_market.DBKey.Companion.DB_USERS
 import com.example.app_study_flee_market.R
+import com.example.app_study_flee_market.chatdetail.ChatRoomActivity
 import com.example.app_study_flee_market.databinding.FragmentChatListBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -36,8 +38,13 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         val fragmentChatListBinding = FragmentChatListBinding.bind(view)
         binding = fragmentChatListBinding
 
-        chatListAdapter = ChatListAdapter(onItemClicked = {
-            // 채팅방으로 이동
+        chatListAdapter = ChatListAdapter(onItemClicked = { chatRoom ->
+
+            context?.let {
+                val intent = Intent(it, ChatRoomActivity::class.java)
+                intent.putExtra("chatKey", chatRoom.key)
+                startActivity(intent)
+            }
         })
 
         chatRoomList.clear()
